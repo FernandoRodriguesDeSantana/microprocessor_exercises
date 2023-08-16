@@ -11,7 +11,6 @@
 # Mapeamento dos registradores:
 # a: $t0, b: $t1, c: $t2, d: $t3, res: $t4
 
-# Eu, Fernando, declarei o registrador $t5 como um registrador para armazenamento temporário
 #########################################################
 li $t0, 5
 li $t1, 10
