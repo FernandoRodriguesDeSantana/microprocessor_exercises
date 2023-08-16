@@ -72,6 +72,7 @@ mflo $t7 #armazena o valor de $lo para $t7
 seq $t6, $t7, 10 
 and $t4, $t5, $t6
 
+
 ######################################
 # res = (a >= b) && (c != d)
 
