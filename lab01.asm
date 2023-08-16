@@ -10,6 +10,8 @@
 #
 # Mapeamento dos registradores:
 # a: $t0, b: $t1, c: $t2, d: $t3, res: $t4
+
+# Eu, Fernando, declarei o registrador $t5 como um registrador para armazenamento temporário
 #########################################################
 li $t0, 5
 li $t1, 10
@@ -32,11 +34,14 @@ sub $t4, $t4, $t2
 
 ######################################
 # res = a * (b + c)
-
+add $t4, $t1, $t2
+mul $t4, $t4, $t0
 
 ######################################
 # res = a + (b - 5)
-
+li $t5, -5
+add $t4, $t1, $t5 # Soma do tipo x + (-Y)
+add $t4, $t4, $t0
 
 ######################################
 # res = ((b % 2) == 0)
