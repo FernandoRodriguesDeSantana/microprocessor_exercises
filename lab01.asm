@@ -19,33 +19,48 @@ li $t2, 15
 li $t3, 20
 ######################################
 # res = a + b + c
+
 add $t4, $t0, $t1
 add $t4, $t4, $t2
 
 ######################################
 # res = a - b - c
+
 sub $t4, $t0, $t1
 sub $t4, $t4, $t2
 
 ######################################
 # res = a * b - c
+
 mul $t4, $t0, $t1
 sub $t4, $t4, $t2
 
 ######################################
 # res = a * (b + c)
+
 add $t4, $t1, $t2
 mul $t4, $t4, $t0
 
 ######################################
 # res = a + (b - 5)
+
 li $t5, -5
 add $t4, $t1, $t5 # Soma do tipo x + (-Y)
 add $t4, $t4, $t0
+li $t4, 0
 
 ######################################
 # res = ((b % 2) == 0)
 
+# FORMA NÃO OTIMIZADA:
+#li $t5, 2
+#div $t1, $t5
+# mflo $t5 # Copia o valor de $lo (quociente) para $t5
+#mfhi $t4 # Copia o valor de $hi (resto) para o $t4
+#seq $t4, $t4, 0
+
+# FORMA OTIMIZADA:
+sra $t4, $t1, 1
 
 ######################################
 # res = (a < b) && (((a+b) % 3) == 10)
