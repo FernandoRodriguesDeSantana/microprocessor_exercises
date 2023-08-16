@@ -64,7 +64,13 @@ sra $t4, $t1, 1
 
 ######################################
 # res = (a < b) && (((a+b) % 3) == 10)
-
+slt $t5, $t0, $t1 # (a < b)
+li $t6, 3 # Carrega o valor 3 para o $t6 para usá-lo como divisor
+add $t4, $t0, $t1
+div $t4, $t6
+mflo $t7 #armazena o valor de $lo para $t7
+seq $t6, $t7, 10 
+and $t4, $t5, $t6
 
 ######################################
 # res = (a >= b) && (c != d)
