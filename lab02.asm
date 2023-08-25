@@ -18,8 +18,7 @@
 
 
 # RESPOSTA: 
-# Uma palavra (.word) ocupa 4 bytes (0x4) na memória.
-
+# Uma palavra (.word) ocupa 4 bytes na memória.
 # Dessa forma, o endereço de palavra1 será: 0x10010400,
 # ocupando os primeiros 4 bytes deste segmento de endereço base
 
