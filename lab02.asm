@@ -49,3 +49,41 @@
 # adress(nums[5]) = 0x10010418 -> endereço do elemento com o valor 72
 # adress(nums[6]) = 0x1001041C
 ##########################################################
+
+#########################################################
+# Realize a conversão das expressões abaixo considerando
+# que os valores das variáveis já estão carregados nos
+# registradores, conforme o mapeamento indicado abaixo
+#
+# Mapeamento dos registradores:
+# i: $s3, j: $s4
+# Endereço base dos vetores: A: $s6 e B: $s7
+#########################################################
+
+.data
+A: .word 0,1,2,3,4,5,6,7,8,9,10
+B: .word 10,9,8,7,6,5,4,3,2,1,0
+i: .word 5
+j: .word 3
+
+.text
+la $s6, A
+la $s7, B
+la $s3, i
+la $s4, j
+
+#########################################################
+# B[8] = A [i-j]
+
+sub $t0, $s6, $s7
+sll $t0, $t0, 2
+add $s6, $s6, $t0
+lw $t1, 0($t0)
+sw $t1, 32($s7)
+#########################################################
+
+
+#########################################################
+# B[32] = A[i] + A[j]
+#
+#########################################################
