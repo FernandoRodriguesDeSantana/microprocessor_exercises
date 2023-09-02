@@ -55,16 +55,20 @@ loop:		rem  $t0, $t2, 2   # B % 2
 	B: .word 2
 	C: .word 3
 	D: .word 4
+	i: .word 2
+	j: .word 10
 .text
 	lw $t1, A
 	lw $t2, B
 	lw $t3, C
 	lw $t4, D
+	lw $t7, i
+	lw $s0, j
 #   a = a * (((c/b) * 2) + 10);
 	slt $t0, $t1, $t2
 	seq $t5, $t3, $t4 
-	and $t6, $t0, $t5
-	beq $t6, 1, then
+	and $t0, $t0, $t5
+	beq $t0, 1, then
 	j, end
 then: 	
 #########################################################
