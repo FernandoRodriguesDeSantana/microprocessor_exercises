@@ -53,23 +53,32 @@ loop:		rem  $t0, $t2, 2   # B % 2
 .data 0x10010000
 	A: .word 1
 	B: .word 2
-	C: .word 3
-	D: .word 4
-	i: .word 2
-	j: .word 10
+	C: .word 4
+	D: .word 5
 .text
 	lw $t1, A
 	lw $t2, B
 	lw $t3, C
 	lw $t4, D
-	lw $t7, i
-	lw $s0, j
-#   a = a * (((c/b) * 2) + 10);
-	slt $t0, $t1, $t2
-	seq $t5, $t3, $t4 
-	and $t0, $t0, $t5
-	beq $t0, 1, then
-	j, end
-then: 	
+
+	slt $t0, $t1, $t2 # ( a < b )
+	seq $t5, $t3, $t4 # ( c == d )
+	and $t0, $t0, $t5 # ( a < b ) &&  ( c == d )
+	beq $t0, 1, then # if ( ( a < b ) &&  ( c == d ) )
+
+#	a = a / ((c+4)/b); ELSE BLOCK:
+	add $t0, $t3, 4
+	div $t0, $t0, $t2	
+	div $t1, $t1, $t0
+
+	j, end # go to a++
+
+#	a = a * (((c/b) * 2) + 10); IF BLOCK:
+then: 	div $t0, $t3, $t2
+	mul $t0, $t0, 2
+	add $t0, $t0, 10
+	mul $t1, $t0, $t1
+
+end:	add $t1, $t1, 1
 #########################################################
 	
