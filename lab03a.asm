@@ -106,20 +106,24 @@ end:	add $t1, $t1, 1
 	lw $t1, A
 	lw $t2, B
 	
-	
-	blt $t1, 10, then # if ( a < 10 )
-	
+	blt $t1, 10, then 	# if ( a < 10 )
 	# ELSE BLOCK:
 #       while( a-- > 5) {
 #         b -= b / a;
-loop:   bgt $t1, 5, body
-body:	div $t0, $t2, $t1
-	sub $t2, $t2, $t0
-	sub $t1, $t1, 1
+loop:   bgt $t1, 5,   body	# a > 5
+body:	div $t0, $t2, $t1	# b / a
+	sub $t2, $t2, $t0	# b - (b/a)
+	sub $t1, $t1, 1		# a--
 			
 
-then:	li $t2, 20 # b = 20
-	ble $t1, 5, then
-	then: #laço for
+then:	li  $t2, 20 		# b = 20
+	ble $t1, 5, then	# a <= 5
 	
+	then: 	li   $a1, 0		# i = 0 then is not declared error
+loop:	bge  $a1, $t1, end
+	mul  $a2, $a1, $t1
+	add  $t2, $t2, $a2  
+	addi $a1, $a1, 1
+	j    loop
+end: 	 	
 	
