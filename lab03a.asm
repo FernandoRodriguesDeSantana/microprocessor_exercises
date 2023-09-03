@@ -97,33 +97,39 @@ end:	add $t1, $t1, 1
 #   }
 # }
 #########################################################
-
 .data 0x10010000
-	A: .word 1
+	A: .word 7
 	B: .word 2
+	i: .word 0
 
 .text
 	lw $t1, A
 	lw $t2, B
+	lw $a0, i
 	
-	blt $t1, 10, then 	# if ( a < 10 )
-	# ELSE BLOCK:
-#       while( a-- > 5) {
-#         b -= b / a;
-loop:   bgt $t1, 5,   body	# a > 5
-body:	div $t0, $t2, $t1	# b / a
-	sub $t2, $t2, $t0	# b - (b/a)
-	sub $t1, $t1, 1		# a--
-			
+	blt $t1, 10,  then	# if(a < 10)
+then:	
+	li  $t2, 20		# b = 20
+	ble $t1, 5,   next	# if(a =< 5)
 
-then:	li  $t2, 20 		# b = 20
-	ble $t1, 5, then	# a <= 5
+	bgt $t1, 5,   next3	# ELSE IF
+next3:	
+	loop2:
+		ble $t1, 5,   end2
+		div $a2, $t2, $t1 	# b / a
+		sub $t2, $t2, $a2	# b -= b / a
+		sub $t1, $t1, 1		# a--
+		j   loop2
+			
+next:	blt $a0, $t1, next2	# for (int i = 0; i < a; i++)
 	
-	then: 	li   $a1, 0		# i = 0 then is not declared error
-loop:	bge  $a1, $t1, end
-	mul  $a2, $a1, $t1
-	add  $t2, $t2, $a2  
-	addi $a1, $a1, 1
-	j    loop
-end: 	 	
+
+next2:	
+	loop: 	mul $a1, $t1, $a0	# a * i
+		add $t2, $t2, $a1	# b += a * i
+		add $a0, $a0, 1		# i++
+		beq $a0, 5,   end 	# i = 5
+		j loop
+end:
+end2:
 	
