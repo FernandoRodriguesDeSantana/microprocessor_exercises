@@ -33,6 +33,22 @@ end:
 # memória 0x10010000 e 0x10010004 são iguais e, em caso 
 # positivo, armazene o valor na posição 0x10010008.
 #
+
+.data	0x10010000
+	A: .word 3
+	B: .word 3
+
+.text
+	la  $t0, A	   # armazena o endereço de A em $t0
+	la  $t1, B	   # armazena o endereço de B em $t1
+	
+	lw  $t2, 0($t0)	   # armazena o valor contido em A no registrador $t2
+	lw  $t3, 0($t1)	   # armazena o valor contido em B no registrador $t3
+	
+	beq $t2, $t3, then # if $t2 = $t3
+	j   end		
+then:	sw  $t2, 4($t1)	   # armazena o valor igual no 0x10010008
+end:
 #########################################################
 
 
