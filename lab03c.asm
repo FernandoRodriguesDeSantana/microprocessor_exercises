@@ -14,6 +14,14 @@
 # seja encontrado, escreva 0x01 no endereço 0x1001000C, 
 # caso contrário, escreva 0x00.
 #
+
+.data	0x10010020    # armazenando o vetor a partir do endereço 0x10010020	
+	Array: 	      .word 0,1,2,3,4,5,6,7,8,9
+
+.data 	0x10010000    
+	Array_Adress: .word 0x10010020 # armazenando o endereço de Array[0] no endereço 0x10010000
+	Size:	        .word 10	         # tamanho do Array	
+	Search:	      .word 7          # procurando um elemento pertencente a Array 		
 #########################################################
 
 
