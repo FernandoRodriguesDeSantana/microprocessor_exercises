@@ -87,6 +87,32 @@ end2:
 # esteja aprovado ou no endereço 0x10010010 caso ele 
 # esteja reprovado.
 #
+
+.data	0x10010000
+	A: .word 10
+	B: .word 10
+	C: .word 10
+	
+.text
+	la  $t0, A
+	la  $t1, B
+	la  $t2, C
+	
+	lw  $t3, 0($t0)
+	lw  $t4, 0($t1)
+	lw  $t5, 0($t2)
+	li  $a0, 1
+	
+	add $t6, $t3, $t4	#  a + b
+	add $t6, $t6, $t5	# (a + b) + c
+	div $t6, $t6, 3		# (a + b + c) / 3
+	
+	bge $t6, 7, then	# if(media >= 7)
+	sw  $a0, 8($t2)		# if < 7
+	j   end
+then:  
+	sw  $a0, 4($t2)		# if >= 7
+end:
 #########################################################
 
 
