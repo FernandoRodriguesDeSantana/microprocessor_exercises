@@ -10,6 +10,20 @@
 # memória 0x10010000 e armazene-a na posição 0x10010004 
 # se ela for positiva, ou 0x10010008 se for negativa.
 #
+
+.data	0x10010000
+	A:  .word 3
+	
+.text
+	la  $t0, A		# armazena em $t0 o endereço de A
+	lw  $t1, 0($t0)		# lê o valor armazenado em A e o salva em $t1
+
+	bgt $t1, 0, then 	# se o valor armazenando em A é > 0
+	sw  $t1, 8($t0)   # armazena o valor de A no segundo espaço consecutivo 
+	j   end		
+then:	
+	sw  $t1, 4($t0)		# armazena o valor de A na próximo espaço de memória
+end:
 #########################################################
 
 
