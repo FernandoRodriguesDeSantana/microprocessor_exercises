@@ -57,6 +57,26 @@ end:
 # memória 0x10010000 e 0x10010004 e, armazene o maior 
 # deles na posição 0x10010008.
 #
+
+.data	0x10010000
+	A: .word 4
+	B: .word 3
+.text
+	la  $t0, A
+	la  $t1, B
+	
+	lw  $t2, 0($t0)
+	lw  $t3, 0($t1)
+	
+	beq $t2, $t3, end	# if(a == b)
+	
+	bgt $t2, $t3, then1	# if(a > b)
+	sw  $t3, 4($t1)		# if(b > a)
+	j   end2
+then1:  sw  $t2, 8($t0)		
+
+end:
+end2:
 #########################################################
 
 
