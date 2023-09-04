@@ -20,8 +20,17 @@
 
 .data 	0x10010000    
 	Array_Adress: .word 0x10010020 # armazenando o endereço de Array[0] no endereço 0x10010000
-	Size:	        .word 10	         # tamanho do Array	
+	Size:	      .word 10         # tamanho do Array	
 	Search:	      .word 7          # procurando um elemento pertencente a Array 		
+.text
+	lw  $t0, Search		# número a ser procurado
+	la  $t1, Array		# endereço do Array[i]
+	
+loop:	lw  $t2, 0($t1)		# valor contido no endereço do Array[i]
+	beq $t0, $t2, then	# if(num == num_search)
+	add $t1, $t1, 4		# adiciona 4 ao endereço contido em $t1
+	j   loop
+then:   li $a0, 5	
 #########################################################
 
 
