@@ -14,4 +14,16 @@
 # endereço da string é armazenado no endereço 0x10010000. 
 # Armazene o resultado no endereço de memória 0x10010004.
 #
+
+.data	0x10010000
+	Adress: .word 0x10010000
+	Result:	.word 0x10010004
+	
+.data	0x10010020
+	Word: .asciiz "Microprocessadores"
+	
+.text
+	la $t0, Word		# carregando em $t0 o endereço da string "Word"
+	sw $t0, Adress		# carregando este endereço em 0x10010000
+
 #########################################################
