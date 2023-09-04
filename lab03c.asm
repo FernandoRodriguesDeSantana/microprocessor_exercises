@@ -21,7 +21,8 @@
 .data 	0x10010000    
 	Array_Adress: .word 0x10010020 # armazenando o endereço de Array[0] no endereço 0x10010000
 	Size:	      .word 10         # tamanho do Array	
-	Search:	      .word 7          # procurando um elemento pertencente a Array 		
+	Search:	      .word 5          # procurando um elemento pertencente a Array 
+	Result:	      .word 0x1001000C		
 .text
 	lw  $t0, Search		# número a ser procurado
 	la  $t1, Array		# endereço do Array[i]
@@ -29,8 +30,12 @@
 loop:	lw  $t2, 0($t1)		# valor contido no endereço do Array[i]
 	beq $t0, $t2, then	# if(num == num_search)
 	add $t1, $t1, 4		# adiciona 4 ao endereço contido em $t1
+	li  $a0, 0x00		# armazenando o valor 0x00 em $a0
+	sw  $a0, Result		# escrevendo o valor de $a0 = 0x00 em 0x1001000C
 	j   loop
-then:   li $a0, 5	
+	
+then:  	li $a1, 0x01		# armazenando o valor 0x01 em $a1
+	sw $a1, Result		# escrevendo o valor de $a1 = 0x01 em 0x1001000C
 #########################################################
 
 
