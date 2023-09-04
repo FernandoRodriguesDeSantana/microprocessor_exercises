@@ -48,5 +48,18 @@ then:  	li $a1, 0x01		# armazenando o valor 0x01 em $a1
 # endereço 0x1001000C o número de elementos encontrados 
 # na procura.
 #
+.data	0x10010000
+	Array_Adress:	.word 0x1001020
+	Array_Size:	.word 10
+	Array_Count:	.word 10
+	Array_Counted:	.word 0x1001000C
+
+.data	0x10010020
+	Array:		.word 0,1,2,3,4,5,6,7,8,9
+
+.text
+	la $t0, Array			# Armazena o endereço do array em $t0
+	lw $t1, 0($t0)			# Armazena o valor contido no respectivo endereço em $t1
+	
 #########################################################
 
