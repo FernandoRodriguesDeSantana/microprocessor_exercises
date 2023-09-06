@@ -49,17 +49,46 @@ then:  	li $a1, 0x01		# armazenando o valor 0x01 em $a1
 # na procura.
 #
 .data	0x10010000
-	Array_Adress:	.word 0x1001020
-	Array_Size:	.word 10
-	Array_Count:	.word 10
-	Array_Counted:	.word 0x1001000C
+	Array_Adress:	.word 0
+	Array_Size:	.word 0
+	Array_Count:	.word 0
+	Array_Counted:	.word 0
 
 .data	0x10010020
-	Array:		.word 0,1,2,3,4,5,6,7,8,9
-
-.text
-	la $t0, Array			# Armazena o endereço do array em $t0
-	lw $t1, 0($t0)			# Armazena o valor contido no respectivo endereço em $t1
+	Array:		.word 1,2,3,4,5,6,7,8,9,10
 	
+.text
+	la $t0, Array   	# armazenando o endereço inicial do array em $t0
+	sw $t0, Array_Adress	# armazenando este endereço em 0x10010000
+	
+	li $t1, 5		# valor a ser contado
+	sw $t1, Array_Count	# armazenando este valor em 0x10010004
+	
+	
+	# Contabilizando o tamanho do Array:
+loop:	lw  $t2, 0($t0)		# valor contido no endereço 0x10010000 (+4)
+	beq $t2, 0, then	# if($t2 == 0)
+			
+				# ELSE
+	add $t0, $t0, 4		# pula para o próximo endereço
+	add $t3, $t3, 1		# contador de 1 em 1
+	j   loop
+	
+then:  	sw $t3, Array_Size
+	
+	la $t0, Array
+	
+	
+	# Procurando o número do Array_Count
+loop2:	lw  $t2, 0($t0)		# valor contido no endereço 0x10010000 (+4)
+	beq $t2, $t1, then2	# if($t2 == 5)
+			
+				# ELSE
+	add $t0, $t0, 4		# pula para o próximo endereço
+	add $t4, $t4, 1		# contador de 1 em 1
+	j   loop2
+	
+then2:  sw $t4, Array_Counted
 #########################################################
+
 
