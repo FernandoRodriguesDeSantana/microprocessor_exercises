@@ -30,7 +30,16 @@ sub  $t0, $t0, $t1	#f-g
 div  $t0, $t2, $t0	#(h*h + 2) / f - g
 ######################################
 # B[i] = 2 * A[i] 
-
+.text
+	sll $t3, $t3, 2	#Multiplicando o índice i por 4, já que o índice percorrerá a .word de 4 em 4 bytes
+	la  $s0, A	#Carrega o endereço da .word A em $s0
+	la  $s1, B	#Carrega o endereço da .word B em $s1
+	
+	# Algoritimo para percorrer  o vetor:
+	# 0xXXXXXXXX + n*(i) -> n*(4 bytes)
+	
+	add $s0, $s0, $t3
+	lb  $
 ######################################
 # B[f+g] = A[i] / (A[j] - B[j])
 
