@@ -56,5 +56,11 @@ div  $t0, $t2, $t0	#(h*h + 2) / f - g
 	
 	la  $s0, A # Carrega o endereço do vetor A no res. $s0	
 	la  $s1, B # Carrega o endereço do vetor B no res. $s1	
-	sll $t3, 2 # Multiplica o cursor i por 4, o qual representa o número de bytes de um endereço
-	sll $t4, 2 # Multiplica o cursor j por 4, o qual representa o número de bytes de um endereço
+	sll $t3, $t3, 2 # Multiplica o cursor i por 4, o qual representa o número de bytes de um endereço
+	sll $t4, $t4, 2 # Multiplica o cursor j por 4, o qual representa o número de bytes de um endereço
+	
+	
+	# Algoritmo da operação (A[j] - B[j]):
+	# Lendo os valores contidos na posição j dos vetores A e B
+	add $s2, $s0, $t4 # Adiciona o valor de $t4 no endereço $s0 para que o endereço armazenado em $s2 aponte para o elemento da posição j do vetor A
+	add $s3, $s1, $t4 # Adiciona o valor de $t4 no endereço $s1 para que o endereço armazenado em $s3 aponte para o elemento da posição j do vetor A
