@@ -46,6 +46,17 @@ div  $t0, $t2, $t0	#(h*h + 2) / f - g
 	add $s1, $s1, $t3 # Percorrendo o vetor i vezes
 	sb  $t5, 0($s1)
 ######################################
+#########################################################
+li $t0, 1  #f
+li $t1, 2  #g
+li $t2, 4  #h
+li $t3, 2  #i
+li $t4, 3  #j
+######################################
+.data
+	A: .word 0,2,6,3,4
+	B: .word 2,4,5,6,7
+######################################
 # B[f+g] = A[i] / (A[j] - B[j])
 .text
 	# O elemento da posição f+g do vetor B receberá
@@ -72,3 +83,15 @@ div  $t0, $t2, $t0	#(h*h + 2) / f - g
 	# Lendo o valor contido na posição i do vetor A
 	add $s4, $s0, $t3 # Adiciona o valor de $t3 no endereço $s0 para que o endereço armazenado em $s4 aponte para o elemento da posição i do vetor A
 	lb  $t7, 0($s4) # Carrega em $t7 o valor contido no endereço armazenado em $s4
+	
+	
+	# Realizando a divisão A[i] / (A[j] - B[j]):
+	div $t7, $t7, $t5
+	
+	
+	# Acessando a posição f+g do vetor B:
+	add $t0, $t0, $t1 # f+g
+	sll $t0, $t0, 2 # Multiplica o cursor f+g por 4, o qual representa o número de bytes de um endereço
+	add $s5, $s1, $t0 # B[f+g]
+	sb  $t7, 0($s5) # B[f+g] = A[i] / (A[j] - B[j])
+	# A instrução da linha 48 está armazenado um valor diferente do contido em $t7
