@@ -47,4 +47,10 @@ div  $t0, $t2, $t0	#(h*h + 2) / f - g
 	sb  $t5, 0($s1)
 ######################################
 # B[f+g] = A[i] / (A[j] - B[j])
+.text
+	# O elemento da posição f+g do vetor B receberá
+	# o resultado da divisão entre: o elemento da po
+	# -sição j do vetor A e o resultado da subtração
+	# entre o elemento da posição j do vetor A com o
+	# elemento da posição j do vetor B
 
