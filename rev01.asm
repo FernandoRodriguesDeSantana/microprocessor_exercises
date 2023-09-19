@@ -53,4 +53,8 @@ div  $t0, $t2, $t0	#(h*h + 2) / f - g
 	# -sição j do vetor A e o resultado da subtração
 	# entre o elemento da posição j do vetor A com o
 	# elemento da posição j do vetor B
-
+	
+	la  $s0, A # Carrega o endereço do vetor A no res. $s0	
+	la  $s1, B # Carrega o endereço do vetor B no res. $s1	
+	sll $t3, 2 # Multiplica o cursor i por 4, o qual representa o número de bytes de um endereço
+	sll $t4, 2 # Multiplica o cursor j por 4, o qual representa o número de bytes de um endereço
