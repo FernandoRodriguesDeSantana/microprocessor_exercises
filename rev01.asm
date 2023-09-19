@@ -64,3 +64,11 @@ div  $t0, $t2, $t0	#(h*h + 2) / f - g
 	# Lendo os valores contidos na posição j dos vetores A e B
 	add $s2, $s0, $t4 # Adiciona o valor de $t4 no endereço $s0 para que o endereço armazenado em $s2 aponte para o elemento da posição j do vetor A
 	add $s3, $s1, $t4 # Adiciona o valor de $t4 no endereço $s1 para que o endereço armazenado em $s3 aponte para o elemento da posição j do vetor A
+	lb  $t5, 0($s2) # Carrega em $t5 o valor contido no endereço armazenado em $s2
+	lb  $t6, 0($s3) # Carrega em $t6 o valor contido no endereço armazenado em $s3
+	sub $t5, $t5, $t6 # (A[j] - B[j])
+	
+	
+	# Lendo o valor contido na posição i do vetor A
+	add $s4, $s0, $t3 # Adiciona o valor de $t3 no endereço $s0 para que o endereço armazenado em $s4 aponte para o elemento da posição i do vetor A
+	lb  $t7, 0($s4) # Carrega em $t7 o valor contido no endereço armazenado em $s4
