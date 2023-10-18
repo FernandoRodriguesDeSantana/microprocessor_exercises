@@ -9,8 +9,14 @@
 # 65(A) e 90(Z). A conversão pode ser feita somando
 # ou subtraindo a diferença entre esses valores.
 
-.data 0x1001000
+.data
 	word: .asciiz "MicRoPROcesSoRS"
-changeCase:
-
-jr $ra
+	
+.text
+	la $a0, word
+	
+	
+	
+	changeCase:
+	
+	jr $ra	
