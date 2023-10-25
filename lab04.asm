@@ -92,15 +92,18 @@ str1:       .asciiz "MCP22105 is cool"
 # ou subtraindo a diferença entre esses valores.
 #
 changeCase:
-	li $t1, 1
-	sll $t1, $t1, 2	# INCREMENTADOR DE BYTE
+	la $t2, 0x10010004
 	
-	beq $a1, 0, then
-	# CONVERSÃO PARA MINÚSCULO:
+loop:	lb $s0, 0($a0)
+	blt $s0, 90, lowercase
+	addi $s0, $s0, 1
+	lowercase:
+	addi $s0, $s0, 32
+	sb $s0, ($a0)
+	addi $a0, $a0, 1
+	beq $t2, $t0, end
 	
-# CONVERSÃO PARA MAIÚSCULO:
-then:
-	
+	j loop
 	jr $ra
 #############################################
 
@@ -124,5 +127,5 @@ strlen:
 	strlen_L0_exit:
 	jr $ra
 #############################################
-	
+end:
 	
