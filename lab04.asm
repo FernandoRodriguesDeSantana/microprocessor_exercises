@@ -110,12 +110,17 @@ lowerCase:
 	sub  $t0, $t0, 1	#TIRA O OFFSET DE $T0
 	
 loop:	lb $t2, 0($t1)		#ESCANEIA LETRA
+	bgt $t2, 90, then
 	addi $t2, $t2, 32	#CONVERTE
 	sb $t2, 0($t1)		#ARMAZENA
 	addi $t1, $t1, 1	#ITERA
 	addi $t3, $t3, 1	#CONTADOR
 	
 	beq  $t3, $t0, end	
+	j loop
+	then:
+	addi $t1, $t1, 1	#ITERA
+	addi $t3, $t3, 1	#CONTADOR
 	j loop
 end:
 	li $t3, 0
