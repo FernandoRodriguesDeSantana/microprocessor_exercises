@@ -92,18 +92,34 @@ str1:       .asciiz "MCP22105 is cool"
 # ou subtraindo a diferença entre esses valores.
 #
 changeCase:
-	la $t2, 0x10010004
+	beq $a1, 0, lowerCase
 	
-loop:	lb $s0, 0($a0)
-	blt $s0, 90, lowercase
-	addi $s0, $s0, 1
-	lowercase:
-	addi $s0, $s0, 32
-	sb $s0, ($a0)
-	addi $a0, $a0, 1
-	beq $t2, $t0, end
+# upperCase:
+loop2:	lb $t2, 0($t1)		#ESCANEIA LETRA
+	sub $t2, $t2, 32	#CONVERTE
+	sb $t2, 0($t1)		#ARMAZENA
+	addi $t1, $t1, 1	#ITERA
+	addi $t3, $t3, 1	#CONTADOR
 	
+	beq  $t3, $t0, end	
+	j loop2
+	
+lowerCase:
+	
+	la $t1, str_buffer	#ENDEREÇO
+	sub  $t0, $t0, 1	#TIRA O OFFSET DE $T0
+	
+loop:	lb $t2, 0($t1)		#ESCANEIA LETRA
+	addi $t2, $t2, 32	#CONVERTE
+	sb $t2, 0($t1)		#ARMAZENA
+	addi $t1, $t1, 1	#ITERA
+	addi $t3, $t3, 1	#CONTADOR
+	
+	beq  $t3, $t0, end	
 	j loop
+end:
+	li $t3, 0
+	la $t1, str_buffer
 	jr $ra
 #############################################
 
@@ -127,5 +143,3 @@ strlen:
 	strlen_L0_exit:
 	jr $ra
 #############################################
-end:
-	
