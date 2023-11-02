@@ -38,94 +38,79 @@ mStr: .asciiz %str
 .end_macro
 
 .data
-str_len:    .word 0
-str_buffer: .space 1024
 str1:       .asciiz "MCP22105 is cool"
 
 .text
-
-	print_str("Digite uma frase: ")
-	get_str(str_buffer, 1024)
-	
-	print_str("Você digitou: ")
-	print_str_ptr(str_buffer)
+	print_str("Str1: ")
+	print_str_ptr(str1)		#PONTEIRO EM 0x10010011 ("Str1:")
+	print_str("\n")
 	
 	## Chamar strlen
-	la $a0, str_buffer
-	jal strlen
-	sw $v0, str_len
+	la $a0, str1			#CARREGA O ENDEREÇO 0X10010000 (FRASE) EM $a0 
+	jal strlen			#JUMP AND LINK PARA A FUNÇÃO STRLEN
+	move $s0, $v0			#s0 RECEBE O CONTEÚDO DE $v0 (QTD DE LETRAS)
 	
-	print_str("A string digitada tem ")
-	lw  $t0, str_len
-	print_int_reg($t0)
+	print_str("A str1 tem ")
+	print_int_reg($s0)		#EXIBE NO PROMPT A QTD DE LETRAS
 	print_str(" caracteres\n")
 	
-	# Fazer a conversão da string para caracteres minúsculos
-	la	$a0, str_buffer
-	li	$a1, 0
-	jal	changeCase
-	print_str("Minúsculo: ")
-	print_str_ptr(str_buffer)
+	## Resize str1
+	la $a0, str1			#CARREGA O ENDEREÇO DA FRASE STR1 EM $a0
+	li $a1, 6			#PARÂMETRO RESIZE (QTD DE LETRAS)DA FUNÇÃO STRRESIZE
+	jal strResize
+	
+	print_str("Str1 ajustada: ")
+	print_str_ptr(str1)
 	print_str("\n")
 	
-	# Fazer a conversão da string para caracteres maiúsculos
-	la	$a0, str_buffer
-	li	$a1, 1
-	jal	changeCase
-	print_str("Maiúsculo: ")
-	print_str_ptr(str_buffer)
-	print_str("\n")
+	## Chamar strlen
+	la $a0, str1
+	jal strlen
+	move $s0, $v0
+	print_str("A str1 ajustada tem ")
+	print_int_reg($s0)
+	print_str(" caracteres\n")
+	
 	
 	print_str("Final do programa\n")
 	exit
 
 #############################################	
-# void changeCase(char * str, bool type);
+# int strResize(char * str, int size);
 #
-#  A função deve converter as letras da string
-# para maiúsculo ou minúsculo, conforme o segundo
-# parâmetro type (0 - minúsculo, 1-maiúsculo). 
+#  O procedimento deve modificar o tamanho da string
+# de acordo com o tamanho especificado pelo parâmetro
+# size. O size deve ser sempre menor que o tamanho
+# atual da string.
 #
-#  As letras minúsculas estão entre os valores 97(a) e
-# 122(z), e as letras maiúsculas entre os valores
-# 65(A) e 90(Z). A conversão pode ser feita somando
-# ou subtraindo a diferença entre esses valores.
+#  O procedimento retorna o valor -1, caso o size seja
+# maior que o tamanho da string, ou o novo tamanho da
+# string, caso contrário, ou seja, o próprio valor de
+# size.
 #
-changeCase:
-	beq $a1, 0, lowerCase
+strResize:
+	.data 0x10010080
+	nullStr: .asciiz ""	#CARACTER NULO PARA APAGAR LETRAS DA FRASE
 	
-# upperCase:
-loop2:	lb $t2, 0($t1)		#ESCANEIA LETRA
-	sub $t2, $t2, 32	#CONVERTE
-	sb $t2, 0($t1)		#ARMAZENA
-	addi $t1, $t1, 1	#ITERA
-	addi $t3, $t3, 1	#CONTADOR
+	.text
+	#$a0 POSSUI O ENDEREÇO DA FRASE
+	sub $t3, $s0, $a1	#QTD DE LETRAS A SER ELIMINADA
+	bltz $t3, end
+	add $a0, $a0, $s0	#SOMA O ENDEREÇO COM A QTD DE LETRAS. SERVE COMO UM PONTEIRO PARA A ÚLTIMA LETRA DA FRASE
+	sub $a0, $a0, 1		#ELIMINA O OFFSET DE 1 
+	lb $t1, nullStr
+	#lb $t1, 0($a0)		#CARREGA A LETRA ARMAZENADA NO ENDEREÇO 0x100100XX
 	
-	beq  $t3, $t0, end	
-	j loop2
+loop:	sb $t1, 0($a0)		#CARREGA OPERADOR NULO NO LUGAR DE UMA LETRA
+	sub $a0, $a0, 1		#JUMP PARA A LETRA ANTERIOR
+	addi $t2, $t2, 1	#CONTADOR
+	bne $t2, $t3, loop
 	
-lowerCase:
-	
-	la $t1, str_buffer	#ENDEREÇO
-	sub  $t0, $t0, 1	#TIRA O OFFSET DE $T0
-	
-loop:	lb $t2, 0($t1)		#ESCANEIA LETRA
-	bgt $t2, 90, then
-	addi $t2, $t2, 32	#CONVERTE
-	sb $t2, 0($t1)		#ARMAZENA
-	addi $t1, $t1, 1	#ITERA
-	addi $t3, $t3, 1	#CONTADOR
-	
-	beq  $t3, $t0, end	
-	j loop
-	then:
-	addi $t1, $t1, 1	#ITERA
-	addi $t3, $t3, 1	#CONTADOR
-	j loop
-end:
-	li $t3, 0
-	la $t1, str_buffer
 	jr $ra
+end:
+	li $t3, -1		#RETORNA -1 SE QTD DE LETRAS A ELIMINAR FOR MAIOR DO QUE A QTD DE LETRAS DA FRASE	
+	jr $ra		
+	
 #############################################
 
 #############################################	
