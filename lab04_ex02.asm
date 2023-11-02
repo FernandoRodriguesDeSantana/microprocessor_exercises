@@ -56,10 +56,10 @@ str1:       .asciiz "MCP22105 is cool"
 	
 	## Resize str1
 	la $a0, str1			#CARREGA O ENDEREÇO DA FRASE STR1 EM $a0
-	li $a1, 8			#PARÂMETRO RESIZE (QTD DE LETRAS)DA FUNÇÃO STRRESIZE
+	li $a1, 17			#PARÂMETRO RESIZE (QTD DE LETRAS)DA FUNÇÃO STRRESIZE
 	jal strResize
 	
-	print_str("Str1 ajustada: ")
+	print_str("\nStr1 ajustada: ")
 	print_str_ptr(str1)
 	print_str("\n")
 	
@@ -89,9 +89,31 @@ str1:       .asciiz "MCP22105 is cool"
 # size.
 #
 strResize:
-#$a0 POSSUI O ENDEREÇO DA FRASE
-	#lb $t1, 0($a0)		#CARREGA A LETRA ARMAZENADA NO ENDEREÇO )0x100100XX
+	.data 0x10010080
+	nullStr: .asciiz ""	#CARACTER NULO PARA APAGAR LETRAS DA FRASE
+	returnValue:  .word -1
+	.text
+	#$a0 POSSUI O ENDEREÇO DA FRASE
+	sub $t3, $s0, $a1	#QTD DE LETRAS A SER ELIMINADA
+	bltz $t3, end
+	add $a0, $a0, $s0	#SOMA O ENDEREÇO COM A QTD DE LETRAS. SERVE COMO UM PONTEIRO PARA A ÚLTIMA LETRA DA FRASE
+	sub $a0, $a0, 1		#ELIMINA O OFFSET DE 1 
+	lb $t1, nullStr
+	#lb $t1, 0($a0)		#CARREGA A LETRA ARMAZENADA NO ENDEREÇO 0x100100XX
+	
+loop:	sb $t1, 0($a0)		#CARREGA OPERADOR NULO NO LUGAR DE UMA LETRA
+	sub $a0, $a0, 1		#JUMP PARA A LETRA ANTERIOR
+	addi $t2, $t2, 1	#CONTADOR
+	bne $t2, $t3, loop
+	
 	jr $ra
+end:
+	li $v0, 1
+	la $a0, returnValue		#RETORNA -1 SE QTD DE LETRAS A ELIMINAR FOR MAIOR DO QUE A QTD DE LETRAS DA FRASE	
+	lw $a0, ($a0)
+	syscall
+	jr $ra		
+	
 #############################################
 
 #############################################	
