@@ -42,13 +42,13 @@ str1:       .asciiz "MCP22105 is cool"
 
 .text
 	print_str("Str1: ")
-	print_str_ptr(str1)
+	print_str_ptr(str1)	#PONTEIRO EM 0x10010011 ("Str1:")
 	print_str("\n")
 	
 	## Chamar strlen
-	la $a0, str1
-	jal strlen
-	move $s0, $v0
+	la $a0, str1		#CARREGA O ENDEREÇO 0X10010000 (FRASE) EM $a0 
+	jal strlen		#JUMP AND LINK PARA A FUNÇÃO STRLEN
+	move $s0, $v0		#s0 RECEBE O CONTEÚDO DE $v0 (APARENTEMENTE QTD DE LETRAS)
 	
 	print_str("A str1 tem ")
 	print_int_reg($s0)
