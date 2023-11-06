@@ -42,6 +42,7 @@ init:
 
 .data
 vetor:  .word 45,3,7,89,32,76
+
 .data 0x10010020
 vetorB: .word 78,2,6,90,124,76,34,71
 
@@ -93,3 +94,45 @@ main:
 #   }
 # }
 ########################################################
+bubble:
+	addiu $sp,   $sp, -16
+	sw    $a0,  0($sp)
+	sw    $a1,  4($sp)
+	sw    $ra,  8($sp)
+
+#	int i; # t0
+	li   $t0, 0
+	
+#	int j; # t1
+	li   $t1, 0
+
+#	int k = size - 1 ; # t2
+	addi $t2, $a1, -1  
+	
+#   	for(i = 0; i < size; i++) {
+	bge  $t0, $a1, then1
+	addi $t0, $t0, 1 #i++
+	then1:
+	
+#        for(j = 0; j < k; j++) {
+	bge  $t1, $t2, then2
+	addi $t1, $t1, 1 #j++
+	addi $t2, $t2, -1
+	then2:
+#         if(v[j] > v[j+1]) {
+	addi $t4, $t1, 1   #j+1
+	sll  $t4, $t4, 2   #j+1
+	sll  $t1, $t1, 2   #j*4 -> tamanho de 1 byte
+	add  $t3, $a0, $t1 #v[j] 
+	lb   $t3, 0($t3)   #v[j]
+	lb   $t4, 0($t4)   #v[j+1]
+	
+#             aux = v[j];
+	add  $t5, $t3, $zero	#aux = $t5
+
+#             v[j] = v[j+1];
+	add  $t3, $t4, $zero	
+
+#             v[j+1] = aux;
+	add  $t4, $t5, $zero
+	jr $ra

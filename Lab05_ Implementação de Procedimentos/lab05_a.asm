@@ -51,7 +51,7 @@ main:
 
 	li $s0, 11 #
 main_L0:
-	beqz $s0, main_L0_end
+	beqz $s0, main_L0_end #INICIO
 	addi $s0, $s0, -1
 	
 	print_str("fatorial(")
@@ -60,12 +60,12 @@ main_L0:
 	
 	move $a0, $s0
 	jal  fatorial
-	move $s1, $v0
+	move $s1, $v0	#MEIO
 	
 	print_intReg($s1)
 	print_str("\n")
 	
-	j main_L0
+	j main_L0	#FIM
 main_L0_end:
   lw	$ra, 12($sp)
   lw    $s1, 8($sp)
@@ -74,24 +74,7 @@ main_L0_end:
 	jr $ra
 ############################################
 fatorial:
-	addi $sp, $sp, -8	#alocação dinâmica de memória
-	sw   $ra, 4($sp)	#endereço de $ra armazenado na 2ª posição de $sp
-	sw   $a0, 0($sp)	#argumento n armazenado na 1ª posição de $sp
-	
-	bnez $a0, else		
-	addi $v0, $zero, 1	#$v0 retorna 1
-	addi $sp, $sp, 8	#desalocação de memória
-	jr   $ra		#volta para o endereço armazenado em $ra
-else:
-	addi $a0, $a0, -1	#iteração do argumento
- 	jal  fatorial		#laço de repetição
- 
-	lw   $a0, 0 ($sp)	#argumento n armazenado na 1ª posição de $sp
-	lw   $ra, 4 ($sp)	#endereço de $ra armazenado na 2ª posição de $sp
-	addi $sp, $sp, 8 	#desalocação de memória
-	mul  $v0, $a0, $v0	#multiplicação fatorial
-	jr   $ra
-	
+	jr $ra
 ######################
 # unsigned int fatorial(unsigned int n){ 
 #     unsigned int ret;
