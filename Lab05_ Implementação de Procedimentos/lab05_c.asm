@@ -18,6 +18,8 @@ vetor:  .word 45,3,7,89,32,76
 .data 0x10010020
 vetorB: .word 78,2,6,90,124,76,34,71
 
+.data 0x10010060
+resultado: .word 
 .text
 
 #-----------
@@ -32,6 +34,7 @@ vetorB: .word 78,2,6,90,124,76,34,71
 #   $a0        -> 0($sp)
 #############################################
 main:
+	la    $s7, resultado
 	addiu $sp, $sp, -16
 	sw    $ra, 8($sp)
 
@@ -92,28 +95,27 @@ bubble:
 	bgt  $t1, $t2, end
 
 #       if(v[j] > v[j+1]) {
-	lb   $t4, 0($a0)	#v[j]
-	addi $t5, $a0, 4        #j+1
-	lb   $t5, 0($t5)	#v[j]
-	
-	bgt  $t4, $t5, switch	
-	addi $t0, $t0, 1
-	addi $t1, $t1, 1
-	
-	j    loop
-	jr   $ra
-	
-	switch:
-#       aux = v[j];
-	move   $t6, $t4
+#		v[j]
+		sll  $t4, $t1, 2
+		add  $t5, $t4, $a0
+		lb   $s0, 0($t5)	#v[j]
+#		v[j+1]
+		addi $t4, $t4, 4
+		add  $t6, $t4, $a0
+		lb   $s1, 0($t6)	#v[j+1]
 		
-#       v[j] = v[j+1];	
-	move   $t4, $t5
-	
-#       v[j+1] = aux;
-	move   $t5, $t6
-	
-	addi $t0, $t0, 1
-	addi $t1, $t1, 1
-	j    print 
+		addi $t0, $t0, 1	#i++
+		addi $t1, $t1, 1	#j++		
+		
+		blt  $s0, $s1, dontSwitch
+#               aux = v[j];
+		move $s2, $s0
+#               v[j] = v[j+1];
+		move $s0, $s1
+#               v[j+1] = aux;
+		move $s1, $s2
+		 
+		dontSwitch:
+		sw   $s0, resultado
+		j    loop
 end:
