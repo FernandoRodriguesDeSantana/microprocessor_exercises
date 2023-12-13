@@ -21,7 +21,7 @@ draw_sprite:
 # X e Y é o vetor posição que reprezenta a posição incial do sprite 
     addiu $sp, $sp, -16
     sw    $ra, 16($sp)
-    sw    
+    sw    $s0, sprite_id
     jr    $ra
 #=============================================================
 

@@ -90,7 +90,7 @@ exception_handler_Done:
 	# Clear Cause register
 	mtc0		$0, $13	
 		
-	lw    $k1, 0($k0)
+	lw    $at, 0($k0)
 	lw    $v0, 4($k0)
 	lw    $v1, 8($k0)
 	lw    $a0, 12($k0)
@@ -121,11 +121,11 @@ exception_handler_Done:
 	lw    $ra, 112($k0)
 	lw    $t0, 116($k0)
 	mthi  $t0
-	lw    $t0, 120($k0) 
+	 
 	mtlo  $t0
 
 	addi  $k0, $k0, 124
-
-	eret
 	
+	eret
+	lw    $t0, 120($k0)
 
